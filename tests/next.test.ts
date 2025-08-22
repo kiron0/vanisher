@@ -1,6 +1,5 @@
-import { VanisherWrapper } from "../src/next";
+import { VanisherNextWrapper } from "../src/next";
 
-// Mock the FadeAway class
 jest.mock("../src/index", () => ({
   Vanisher: jest.fn().mockImplementation(() => ({
     getStatus: jest.fn().mockReturnValue({
@@ -15,9 +14,7 @@ jest.mock("../src/index", () => ({
   })),
 }));
 
-// Set up Next.js environment for this specific test
 beforeAll(() => {
-  // Mock Next.js specific environment
   Object.defineProperty(window, "__NEXT_DATA__", {
     value: { buildId: "test" },
     writable: true,
@@ -28,7 +25,6 @@ beforeAll(() => {
     writable: true,
   });
 
-  // Mock Next.js meta tag
   Object.defineProperty(document, "querySelector", {
     value: jest.fn().mockReturnValue({
       getAttribute: () => "next-head-count",
@@ -36,7 +32,6 @@ beforeAll(() => {
     writable: true,
   });
 
-  // Mock Next.js environment variables
   Object.defineProperty(process, "env", {
     value: {
       NODE_ENV: "test",
@@ -47,10 +42,9 @@ beforeAll(() => {
   });
 });
 
-describe("Vanisher VanisherWrapper (Next.js)", () => {
+describe("Vanisher VanisherNextWrapper (Next.js)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Suppress console.error for this test since we expect warnings
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
@@ -59,56 +53,42 @@ describe("Vanisher VanisherWrapper (Next.js)", () => {
   });
 
   it("should be defined and exportable", () => {
-    expect(VanisherWrapper).toBeDefined();
-    expect(typeof VanisherWrapper).toBe("function");
+    expect(VanisherNextWrapper).toBeDefined();
+    expect(typeof VanisherNextWrapper).toBe("function");
   });
 
   it("should have correct component interface", () => {
-    // Test that the component can be called (basic smoke test)
     expect(() => {
-      // This tests the component function exists and can be called
-      // without actually rendering (which avoids React version issues)
-      expect(VanisherWrapper).toBeDefined();
-      expect(typeof VanisherWrapper).toBe("function");
+      expect(VanisherNextWrapper).toBeDefined();
+      expect(typeof VanisherNextWrapper).toBe("function");
     }).not.toThrow();
   });
 
   it("should export component with correct name", () => {
-    expect(VanisherWrapper.name).toBe("VanisherWrapper");
+    expect(VanisherNextWrapper.name).toBe("VanisherNextWrapper");
   });
 
   it("should be a React functional component", () => {
-    // Test that it's a function (functional component)
-    expect(typeof VanisherWrapper).toBe("function");
+    expect(typeof VanisherNextWrapper).toBe("function");
 
-    // Test that it accepts props (basic prop interface check)
-
-    // This verifies the component can accept the expected props
     expect(() => {
-      // Just verify the component function exists and can handle props
-      const component = VanisherWrapper;
+      const component = VanisherNextWrapper;
       expect(component).toBeDefined();
     }).not.toThrow();
   });
 
   it("should handle hydration safety", () => {
-    // Test that the component has hydration-safe logic
-    // This is a basic test for Next.js specific features
-    expect(VanisherWrapper).toBeDefined();
-    expect(typeof VanisherWrapper).toBe("function");
+    expect(VanisherNextWrapper).toBeDefined();
+    expect(typeof VanisherNextWrapper).toBe("function");
   });
 
   it("should detect Next.js environment correctly", () => {
-    // Since we mocked Next.js environment, it should NOT show React warnings
-    // (unlike the React component test)
-    expect(VanisherWrapper).toBeDefined();
+    expect(VanisherNextWrapper).toBeDefined();
   });
 
   it("should support Next.js specific props", () => {
-    // Test Next.js specific functionality
-
     expect(() => {
-      const component = VanisherWrapper;
+      const component = VanisherNextWrapper;
       expect(component).toBeDefined();
     }).not.toThrow();
   });

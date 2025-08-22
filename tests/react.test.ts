@@ -1,6 +1,5 @@
-import { VanisherWrapper } from "../src/react";
+import { VanisherReactWrapper } from "../src/react";
 
-// Mock the FadeAway class
 jest.mock("../src/index", () => ({
   Vanisher: jest.fn().mockImplementation(() => ({
     getStatus: jest.fn().mockReturnValue({
@@ -15,10 +14,9 @@ jest.mock("../src/index", () => ({
   })),
 }));
 
-describe("Vanisher VanisherWrapper (React)", () => {
+describe("Vanisher VanisherReactWrapper (React)", () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    // Suppress console.error for this test since we expect warnings
     jest.spyOn(console, "error").mockImplementation(() => {});
   });
 
@@ -27,12 +25,11 @@ describe("Vanisher VanisherWrapper (React)", () => {
   });
 
   it("should be defined and exportable", () => {
-    expect(VanisherWrapper).toBeDefined();
-    expect(typeof VanisherWrapper).toBe("function");
+    expect(VanisherReactWrapper).toBeDefined();
+    expect(typeof VanisherReactWrapper).toBe("function");
   });
 
   it("should have correct component interface", () => {
-    // Test that the component can be called (basic smoke test)
     expect(() => {
       const props = {
         deadline: 7,
@@ -40,42 +37,26 @@ describe("Vanisher VanisherWrapper (React)", () => {
         children: "Test content",
       };
 
-      // This tests the component function exists and can be called
-      // without actually rendering (which avoids React version issues)
-      expect(VanisherWrapper).toBeDefined();
-      expect(typeof VanisherWrapper).toBe("function");
+      expect(VanisherReactWrapper).toBeDefined();
+      expect(typeof VanisherReactWrapper).toBe("function");
     }).not.toThrow();
   });
 
   it("should export component with correct name", () => {
-    expect(VanisherWrapper.name).toBe("VanisherWrapper");
+    expect(VanisherReactWrapper.name).toBe("VanisherReactWrapper");
   });
 
   it("should be a React functional component", () => {
-    // Test that it's a function (functional component)
-    expect(typeof VanisherWrapper).toBe("function");
+    expect(typeof VanisherReactWrapper).toBe("function");
 
-    // Test that it accepts props (basic prop interface check)
-    const mockProps = {
-      deadline: 30,
-      minOpacity: 0.1,
-      maxOpacity: 1.0,
-      showStatus: true,
-      statusFormat: "days" as const,
-    };
-
-    // This verifies the component can accept the expected props
     expect(() => {
-      // Just verify the component function exists and can handle props
-      const component = VanisherWrapper;
+      const component = VanisherReactWrapper;
       expect(component).toBeDefined();
     }).not.toThrow();
   });
 
   it("should handle environment detection", () => {
-    // The component should be importable and defined
-    // Environment detection happens during component execution, not import
-    expect(VanisherWrapper).toBeDefined();
-    expect(typeof VanisherWrapper).toBe("function");
+    expect(VanisherReactWrapper).toBeDefined();
+    expect(typeof VanisherReactWrapper).toBe("function");
   });
 });

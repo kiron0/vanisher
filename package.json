@@ -1,8 +1,8 @@
 {
   "name": "vanisher",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
-  "description": "A TypeScript package that gradually vanishes websites by decreasing body opacity daily until a deadline",
+  "description": "Gradually fades out any website or element by reducing opacity over time until a specified deadline. Perfect for unpaid invoices, expiring offers, or time-sensitive content. Includes React and Next.js components, dynamic updates, and full TypeScript support.",
   "main": "dist/index.cjs",
   "module": "dist/index.esm.js",
   "unpkg": "dist/index.js",

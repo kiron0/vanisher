@@ -1,19 +1,10 @@
-export interface VanisherOptions {
-  deadline: Date | string; // Date when website should be completely faded
-  targetElement?: string | HTMLElement;
-  onDeadlineReached?: () => void;
-  updateIntervalMs?: number; // auto-update interval in milliseconds
-  fadeDurationMs?: number; // duration of fade transition
-}
+import {
+  type VanisherOptions,
+  type VanisherResult,
+  type VanisherWrapperProps,
+} from "./types";
 
-export interface VanisherResult {
-  opacity: number;
-  daysRemaining: number;
-  hoursRemaining: number;
-  isActive: boolean;
-}
-
-export class Vanisher {
+class Vanisher {
   private options: Required<VanisherOptions>;
   private targetElement: HTMLElement | null = null;
   private deadlineDate: Date;
@@ -34,8 +25,8 @@ export class Vanisher {
       deadline: this.deadlineDate,
       targetElement: options.targetElement || "body",
       onDeadlineReached: options.onDeadlineReached || (() => {}),
-      updateIntervalMs: options.updateIntervalMs ?? 1000 * 60 * 60, // default: 1 hour (more frequent)
-      fadeDurationMs: options.fadeDurationMs ?? 300, // default fade duration
+      updateIntervalMs: options.updateIntervalMs ?? 1000 * 60 * 60,
+      fadeDurationMs: options.fadeDurationMs ?? 300,
     };
 
     this.initializedAt = new Date();
@@ -54,7 +45,6 @@ export class Vanisher {
     this.targetElement = this.getElement();
 
     if (this.targetElement) {
-      // Set up transition only once
       if (!this.targetElement.style.transition) {
         this.targetElement.style.transition = `opacity ${this.options.fadeDurationMs}ms ease-in-out`;
       }
@@ -98,7 +88,7 @@ export class Vanisher {
 
   private calculateTotalPeriod(): number {
     const timeDiff = this.deadlineDate.getTime() - this.initializedAt.getTime();
-    return Math.max(1, timeDiff); // Return milliseconds for more precision
+    return Math.max(1, timeDiff);
   }
 
   private clamp(value: number, min = 0, max = 1): number {
@@ -117,15 +107,12 @@ export class Vanisher {
     if (!this.targetElement) return;
 
     const currentDate = this.getCurrentDate();
-    const { days: daysRemaining, totalMs } =
-      this.calculateTimeRemaining(currentDate);
+    const { totalMs } = this.calculateTimeRemaining(currentDate);
     const opacity = this.calculateOpacity(currentDate);
 
-    // Only update if opacity has changed significantly
     if (Math.abs(this.lastOpacity - opacity) > 0.01) {
       this.lastOpacity = opacity;
 
-      // Use requestAnimationFrame for smoother updates
       if (this.rafId) {
         cancelAnimationFrame(this.rafId);
       }
@@ -150,7 +137,7 @@ export class Vanisher {
   }
 
   private startAutoUpdater(): void {
-    if (this.updaterId !== null) return; // already running
+    if (this.updaterId !== null) return;
 
     this.updaterId = window.setInterval(() => {
       this.applyOpacity();
@@ -251,12 +238,10 @@ export class Vanisher {
   }
 }
 
-// Convenience function
-export function createVanisher(options: VanisherOptions): Vanisher {
+function createVanisher(options: VanisherOptions): Vanisher {
   return new Vanisher(options);
 }
 
-// Auto-init from script tag attributes with better error handling
 if (typeof window !== "undefined" && typeof document !== "undefined") {
   document.addEventListener("DOMContentLoaded", () => {
     try {
@@ -277,3 +262,11 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
     (globalThis as any).createVanisher = createVanisher;
   }
 }
+
+export {
+  createVanisher,
+  Vanisher,
+  type VanisherOptions,
+  type VanisherResult,
+  type VanisherWrapperProps,
+};

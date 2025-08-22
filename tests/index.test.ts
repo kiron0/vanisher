@@ -1,20 +1,15 @@
 import { createVanisher, Vanisher, VanisherOptions } from "../src/index";
 
-// Mock DOM environment for testing
 const mockElement = document.createElement("div");
 mockElement.style.opacity = "";
 mockElement.style.transition = "";
 
-// Mock global objects
 const mockSetInterval = jest.fn(() => 123);
 const mockClearInterval = jest.fn();
 
-// Setup mocks
 beforeAll(() => {
-  // Mock document methods
   document.querySelector = jest.fn(() => mockElement);
 
-  // Mock window methods
   window.setInterval = mockSetInterval as any;
   window.clearInterval = mockClearInterval as any;
 });
@@ -27,11 +22,9 @@ describe("Vanisher", () => {
     jest.clearAllMocks();
     jest.clearAllTimers();
 
-    // Reset mock element
     mockElement.style.opacity = "";
     mockElement.style.transition = "";
 
-    // Set deadline to 30 days from now
     const futureDate = new Date();
     futureDate.setDate(futureDate.getDate() + 30);
 
@@ -85,16 +78,14 @@ describe("Vanisher", () => {
       }).toThrow("Invalid deadline date provided");
     });
 
-    it("should set default updateIntervalMs to 1 day", () => {
+    it("should set default updateIntervalMs to 1 hour", () => {
       const instance = new Vanisher({
-        deadline: new Date(Date.now() + 86400000 * 30), // 30 days from now
+        deadline: new Date(Date.now() + 86400000 * 30),
+        fadeDurationMs: 1000,
       });
 
-      // Access private property for testing
       const privateInstance = instance as any;
-      expect(privateInstance.options.updateIntervalMs).toBe(
-        1000 * 60 * 60 * 24,
-      );
+      expect(privateInstance.options.updateIntervalMs).toBe(1000 * 60 * 60);
       instance.destroy();
     });
 
@@ -102,6 +93,7 @@ describe("Vanisher", () => {
       const instance = new Vanisher({
         deadline: new Date(Date.now() + 86400000 * 30),
         updateIntervalMs: 5000,
+        fadeDurationMs: 1000,
       });
 
       const privateInstance = instance as any;
@@ -160,7 +152,6 @@ describe("Vanisher", () => {
       const newElement = document.createElement("div");
       vanisher.updateOptions({ targetElement: newElement });
 
-      // Should not throw
       expect(vanisher).toBeDefined();
     });
 
@@ -168,14 +159,12 @@ describe("Vanisher", () => {
       const mockCallback = jest.fn();
       vanisher.updateOptions({ onDeadlineReached: mockCallback });
 
-      // Should not throw
       expect(vanisher).toBeDefined();
     });
 
     it("should update updateIntervalMs and restart updater", () => {
       vanisher.updateOptions({ updateIntervalMs: 5000 });
 
-      // Should not throw
       expect(vanisher).toBeDefined();
     });
 
@@ -202,7 +191,7 @@ describe("Vanisher", () => {
   describe("deadline date", () => {
     it("should use provided deadline date", () => {
       const deadlineDate = new Date();
-      deadlineDate.setDate(deadlineDate.getDate() + 5); // 5 days from now
+      deadlineDate.setDate(deadlineDate.getDate() + 5);
 
       const instance = new Vanisher({
         deadline: deadlineDate,
@@ -266,7 +255,7 @@ describe("Vanisher", () => {
 
   describe("DOM manipulation", () => {
     it("should set transition style on target element", () => {
-      expect(mockElement.style.transition).toBe("opacity 0.3s ease-in-out");
+      expect(mockElement.style.transition).toBe("opacity 300ms ease-in-out");
     });
 
     it("should apply opacity to target element", () => {
@@ -306,7 +295,7 @@ describe("Vanisher", () => {
     });
 
     it("should restart auto-updater when updateIntervalMs changes", () => {
-      vanisher.updateOptions({ updateIntervalMs: 5000 });
+      vanisher.updateOptions({ updateIntervalMs: 1000 });
 
       expect(mockClearInterval).toHaveBeenCalled();
       expect(mockSetInterval).toHaveBeenCalledTimes(2);
