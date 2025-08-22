@@ -3,11 +3,13 @@ export interface VanisherOptions {
   targetElement?: string | HTMLElement;
   onDeadlineReached?: () => void;
   updateIntervalMs?: number; // auto-update interval in milliseconds
+  fadeDurationMs?: number; // duration of fade transition
 }
 
 export interface VanisherResult {
   opacity: number;
   daysRemaining: number;
+  hoursRemaining: number;
   isActive: boolean;
 }
 
@@ -17,6 +19,8 @@ export class Vanisher {
   private deadlineDate: Date;
   private initializedAt: Date;
   private updaterId: number | null = null;
+  private rafId: number | null = null;
+  private lastOpacity: number = 1;
 
   constructor(options: VanisherOptions) {
     this.deadlineDate =
@@ -30,7 +34,8 @@ export class Vanisher {
       deadline: this.deadlineDate,
       targetElement: options.targetElement || "body",
       onDeadlineReached: options.onDeadlineReached || (() => {}),
-      updateIntervalMs: options.updateIntervalMs ?? 1000 * 60 * 60 * 24, // default: 1 day
+      updateIntervalMs: options.updateIntervalMs ?? 1000 * 60 * 60, // default: 1 hour (more frequent)
+      fadeDurationMs: options.fadeDurationMs ?? 300, // default fade duration
     };
 
     this.initializedAt = new Date();
@@ -49,11 +54,14 @@ export class Vanisher {
     this.targetElement = this.getElement();
 
     if (this.targetElement) {
+      // Set up transition only once
       if (!this.targetElement.style.transition) {
-        this.targetElement.style.transition = "opacity 0.3s ease-in-out";
+        this.targetElement.style.transition = `opacity ${this.options.fadeDurationMs}ms ease-in-out`;
       }
       this.applyOpacity();
       this.startAutoUpdater();
+    } else {
+      console.warn("Vanisher: Target element not found");
     }
   }
 
@@ -70,16 +78,27 @@ export class Vanisher {
     return new Date();
   }
 
-  private calculateDaysRemaining(
-    currentDate: Date = this.getCurrentDate(),
-  ): number {
+  private calculateTimeRemaining(currentDate: Date = this.getCurrentDate()): {
+    days: number;
+    hours: number;
+    totalMs: number;
+  } {
     const timeDiff = this.deadlineDate.getTime() - currentDate.getTime();
-    return Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const days = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hours = Math.floor(
+      (timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60),
+    );
+
+    return {
+      days,
+      hours,
+      totalMs: timeDiff,
+    };
   }
 
   private calculateTotalPeriod(): number {
     const timeDiff = this.deadlineDate.getTime() - this.initializedAt.getTime();
-    return Math.max(1, Math.floor(timeDiff / (1000 * 60 * 60 * 24)));
+    return Math.max(1, timeDiff); // Return milliseconds for more precision
   }
 
   private clamp(value: number, min = 0, max = 1): number {
@@ -87,26 +106,44 @@ export class Vanisher {
   }
 
   private calculateOpacity(currentDate: Date = this.getCurrentDate()): number {
-    const daysRemaining = this.calculateDaysRemaining(currentDate);
-    if (daysRemaining <= 0) return 0;
-    return this.clamp(daysRemaining / this.calculateTotalPeriod());
+    const { totalMs } = this.calculateTimeRemaining(currentDate);
+    if (totalMs <= 0) return 0;
+
+    const totalPeriod = this.calculateTotalPeriod();
+    return this.clamp(totalMs / totalPeriod);
   }
 
   private applyOpacity(): void {
     if (!this.targetElement) return;
 
     const currentDate = this.getCurrentDate();
-    const daysRemaining = this.calculateDaysRemaining(currentDate);
+    const { days: daysRemaining, totalMs } =
+      this.calculateTimeRemaining(currentDate);
     const opacity = this.calculateOpacity(currentDate);
 
-    this.targetElement.style.opacity = opacity.toString();
-    this.targetElement.style.pointerEvents = opacity === 0 ? "none" : "";
-    this.targetElement.style.userSelect = opacity === 0 ? "none" : "";
-    document.body.style.overflow = opacity === 0 ? "hidden" : "";
-    document.body.style.touchAction = opacity === 0 ? "none" : "";
-    document.body.style.cursor = opacity === 0 ? "default" : "";
+    // Only update if opacity has changed significantly
+    if (Math.abs(this.lastOpacity - opacity) > 0.01) {
+      this.lastOpacity = opacity;
 
-    if (daysRemaining <= 0) {
+      // Use requestAnimationFrame for smoother updates
+      if (this.rafId) {
+        cancelAnimationFrame(this.rafId);
+      }
+
+      this.rafId = requestAnimationFrame(() => {
+        this.targetElement!.style.opacity = opacity.toString();
+
+        if (opacity === 0) {
+          this.targetElement!.style.pointerEvents = "none";
+          this.targetElement!.style.userSelect = "none";
+        } else {
+          this.targetElement!.style.pointerEvents = "";
+          this.targetElement!.style.userSelect = "";
+        }
+      });
+    }
+
+    if (totalMs <= 0) {
       this.options.onDeadlineReached();
       this.stopAutoUpdater();
     }
@@ -125,17 +162,24 @@ export class Vanisher {
       clearInterval(this.updaterId);
       this.updaterId = null;
     }
+
+    if (this.rafId !== null) {
+      cancelAnimationFrame(this.rafId);
+      this.rafId = null;
+    }
   }
 
   public getStatus(): VanisherResult {
     const currentDate = this.getCurrentDate();
-    const daysRemaining = this.calculateDaysRemaining(currentDate);
+    const { days: daysRemaining, hours: hoursRemaining } =
+      this.calculateTimeRemaining(currentDate);
     const opacity = this.calculateOpacity(currentDate);
 
     return {
       opacity,
       daysRemaining: Math.max(0, daysRemaining),
-      isActive: daysRemaining > 0,
+      hoursRemaining: Math.max(0, hoursRemaining),
+      isActive: daysRemaining > 0 || hoursRemaining > 0,
     };
   }
 
@@ -144,7 +188,7 @@ export class Vanisher {
   }
 
   public getDaysRemaining(): number {
-    return this.calculateDaysRemaining();
+    return Math.max(0, this.calculateTimeRemaining().days);
   }
 
   public updateOptions(newOptions: Partial<VanisherOptions>): void {
@@ -175,19 +219,35 @@ export class Vanisher {
       this.startAutoUpdater();
     }
 
+    if (newOptions.fadeDurationMs !== undefined) {
+      this.options.fadeDurationMs = newOptions.fadeDurationMs;
+      if (this.targetElement) {
+        this.targetElement.style.transition = `opacity ${this.options.fadeDurationMs}ms ease-in-out`;
+      }
+    }
+
     this.applyOpacity();
   }
 
   public reset(): void {
     if (this.targetElement) {
       this.targetElement.style.opacity = "1";
+      this.targetElement.style.pointerEvents = "";
+      this.targetElement.style.userSelect = "";
     }
     this.initializedAt = new Date();
+    this.lastOpacity = 1;
     this.applyOpacity();
   }
 
   public destroy(): void {
     this.stopAutoUpdater();
+    if (this.targetElement) {
+      this.targetElement.style.opacity = "";
+      this.targetElement.style.transition = "";
+      this.targetElement.style.pointerEvents = "";
+      this.targetElement.style.userSelect = "";
+    }
   }
 }
 
@@ -196,15 +256,21 @@ export function createVanisher(options: VanisherOptions): Vanisher {
   return new Vanisher(options);
 }
 
-// Auto-init from script tag attributes
+// Auto-init from script tag attributes with better error handling
 if (typeof window !== "undefined" && typeof document !== "undefined") {
-  const script = document.currentScript as HTMLScriptElement;
-  if (script) {
-    const deadline = script.getAttribute("data-deadline");
-    if (deadline) {
-      createVanisher({ deadline });
+  document.addEventListener("DOMContentLoaded", () => {
+    try {
+      const script = document.currentScript as HTMLScriptElement;
+      if (script) {
+        const deadline = script.getAttribute("data-deadline");
+        if (deadline) {
+          createVanisher({ deadline });
+        }
+      }
+    } catch (error) {
+      console.error("Vanisher initialization error:", error);
     }
-  }
+  });
 
   if (typeof (globalThis as any) !== "undefined") {
     (globalThis as any).Vanisher = Vanisher;

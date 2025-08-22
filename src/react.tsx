@@ -7,41 +7,63 @@
  * This component will show warnings/errors if used in Next.js projects.
  */
 
-import React, { useEffect, useRef, useState } from "react";
+import * as React from "react";
 import { Vanisher, type VanisherOptions } from "./index";
 
 // Runtime environment detection
-const isNextJS = () => {
-  // Check for Next.js specific globals
-  if (typeof window !== "undefined") {
-    // Check for Next.js router (using type assertion)
-    if (
-      (window as any).__NEXT_DATA__ ||
-      (window as any).__NEXT_ROUTER_BASEPATH__
-    ) {
-      return true;
+// More specific Next.js detection
+const isNextJS = (): boolean => {
+  // Server-side detection (Node.js environment)
+  if (typeof window === "undefined") {
+    // Check for Next.js specific environment variables
+    if (typeof process !== "undefined" && process.env) {
+      return !!(
+        process.env["NEXT_PUBLIC_"] ||
+        process.env["__NEXT_DEV__"] ||
+        process.env["__NEXT_PRIVATE__"]
+      );
     }
+    return false;
+  }
 
-    // Check for Next.js specific meta tags
+  // Client-side detection
+  // 1. Check for Next.js data attribute (most reliable)
+  if ((window as any).__NEXT_DATA__) {
+    return true;
+  }
+
+  // 2. Check for Next.js router
+  if ((window as any).next && (window as any).next.router) {
+    return true;
+  }
+
+  // 3. Check for Next.js specific functions
+  if (typeof (window as any).__NEXT_REGISTER_PAGE === "function") {
+    return true;
+  }
+
+  // 4. Check for Next.js specific meta tags
+  try {
     const nextMeta = document.querySelector('meta[name="next-head-count"]');
     if (nextMeta) {
       return true;
     }
-  }
-
-  // Check for Next.js build-time constants
-  if (typeof process !== "undefined" && process.env) {
-    if (process.env["NEXT_PUBLIC_"] || process.env["__NEXT_DEV__"]) {
-      return true;
-    }
+  } catch (e) {
+    // Ignore errors
   }
 
   return false;
 };
 
-// Warning function
-const showReactWarning = () => {
-  const warningMessage = `
+// Warning function - memoized to prevent multiple executions
+const showReactWarning = (() => {
+  let hasWarned = false;
+
+  return () => {
+    if (hasWarned) return;
+    hasWarned = true;
+
+    const warningMessage = `
 🚨 REACT COMPONENT USED IN NEXT.JS PROJECT!
 
 You're trying to use the React-specific component in a Next.js project.
@@ -55,73 +77,97 @@ Current import: vanisher/react
 Recommended import: vanisher/next
 `;
 
-  // Show console error
-  console.error(warningMessage);
+    // Show console error
+    console.error(warningMessage);
 
-  // Show browser alert in development
-  if (
-    process.env["NODE_ENV"] === "development" ||
-    process.env["NODE_ENV"] === "test"
-  ) {
-    alert(
-      "🚨 React component used in Next.js project! Check console for details.",
-    );
-  }
+    // Show browser alert in development
+    if (
+      process.env["NODE_ENV"] === "development" ||
+      process.env["NODE_ENV"] === "test"
+    ) {
+      alert(
+        "🚨 React component used in Next.js project! Check console for details.",
+      );
+    }
 
-  // Throw error in strict mode
-  if (process.env["NODE_ENV"] === "production") {
-    throw new Error(
-      "React component should not be used in Next.js projects. Use vanisher/next instead.",
-    );
-  }
-};
+    // Throw error in production to prevent silent failures
+    if (process.env["NODE_ENV"] === "production") {
+      throw new Error(
+        "React component should not be used in Next.js projects. Use vanisher/next instead.",
+      );
+    }
+  };
+})();
 
-export interface VanisherWrapperProps
-  extends Omit<VanisherOptions, "targetElement"> {
+interface VanisherWrapperProps extends Omit<VanisherOptions, "targetElement"> {
   children?: React.ReactNode;
   className?: string;
   style?: React.CSSProperties;
+  fallback?: React.ReactNode; // Fallback UI for Next.js environments
 }
 
-export const VanisherWrapper: React.FC<VanisherWrapperProps> = ({
+const VanisherWrapper: React.FC<VanisherWrapperProps> = ({
   children,
   className = "",
   style = {},
   deadline,
   onDeadlineReached,
+  updateIntervalMs,
+  fallback = null,
+  ...restProps
 }) => {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const vanisherRef = useRef<Vanisher | null>(null);
-  const [environmentChecked, setEnvironmentChecked] = useState(false);
+  const containerRef = React.useRef<HTMLDivElement>(null);
+  const vanisherRef = React.useRef<Vanisher | null>(null);
+  const [isNextEnvironment, setIsNextEnvironment] = React.useState(false);
+  const [isMounted, setIsMounted] = React.useState(false);
 
   // Environment check on mount
-  useEffect(() => {
-    if (!environmentChecked) {
-      setEnvironmentChecked(true);
+  React.useEffect(() => {
+    const nextDetected = isNextJS();
+    setIsNextEnvironment(nextDetected);
 
-      // Check if we're in Next.js environment
-      if (isNextJS()) {
-        showReactWarning();
-      }
+    if (nextDetected) {
+      showReactWarning();
     }
-  }, [environmentChecked]);
 
-  useEffect(() => {
-    // Create vanisher instance with the container as target
-    if (containerRef.current) {
+    setIsMounted(true);
+  }, []);
+
+  // Initialize vanisher
+  React.useEffect(() => {
+    if (isNextEnvironment || !isMounted || !containerRef.current) return;
+
+    try {
       vanisherRef.current = new Vanisher({
         deadline,
         targetElement: containerRef.current,
         onDeadlineReached,
+        updateIntervalMs,
+        ...restProps,
       });
+    } catch (error) {
+      console.error("Failed to initialize Vanisher:", error);
     }
 
     return () => {
       if (vanisherRef.current) {
-        vanisherRef.current.reset();
+        vanisherRef.current.destroy();
+        vanisherRef.current = null;
       }
     };
-  }, [deadline, onDeadlineReached]);
+  }, [
+    deadline,
+    onDeadlineReached,
+    updateIntervalMs,
+    isNextEnvironment,
+    isMounted,
+    restProps,
+  ]);
+
+  // Don't render the vanisher in Next.js environments, show fallback instead
+  if (isNextEnvironment) {
+    return <>{fallback}</>;
+  }
 
   return (
     <div ref={containerRef} className={className} style={style}>
@@ -129,3 +175,9 @@ export const VanisherWrapper: React.FC<VanisherWrapperProps> = ({
     </div>
   );
 };
+
+// Add display name for better debugging
+VanisherWrapper.displayName = "VanisherWrapper";
+
+// Default export
+export { VanisherWrapper, type VanisherWrapperProps };
