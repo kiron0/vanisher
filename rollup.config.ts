@@ -1,9 +1,9 @@
 import commonjs from "@rollup/plugin-commonjs";
 import resolve from "@rollup/plugin-node-resolve";
+import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import type { RollupOptions } from "rollup";
 import dts from "rollup-plugin-dts";
-import { terser } from "rollup-plugin-terser";
 
 const config: RollupOptions[] = [
   // Main bundle (UMD for browser + CJS + ESM)

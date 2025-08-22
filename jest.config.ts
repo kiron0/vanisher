@@ -6,7 +6,14 @@ const config: Config = {
   roots: ["<rootDir>/tests"],
   testMatch: ["**/*.{test,spec}.{ts,tsx}"],
   transform: {
-    "^.+\\.(ts|tsx)$": "ts-jest",
+    "^.+\\.(ts|tsx)$": [
+      "ts-jest",
+      {
+        tsconfig: {
+          jsx: "react-jsx",
+        },
+      },
+    ],
   },
   collectCoverageFrom: [
     "src/**/*.{ts,tsx}",
@@ -19,6 +26,13 @@ const config: Config = {
   coverageReporters: ["text", "lcov", "html"],
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   setupFilesAfterEnv: ["<rootDir>/tests/setupTests.ts"],
+  moduleNameMapper: {
+    "^react$": "<rootDir>/node_modules/react",
+    "^react-dom$": "<rootDir>/node_modules/react-dom",
+  },
+  testEnvironmentOptions: {
+    customExportConditions: ["node", "node-addons"],
+  },
 };
 
 export default config;

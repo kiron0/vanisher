@@ -15,35 +15,36 @@ jest.mock("../src/index", () => ({
   })),
 }));
 
-// Mock React for basic component testing
-jest.mock("react", () => ({
-  useEffect: jest.fn((fn) => fn()),
-  useRef: jest.fn(() => ({ current: { style: {} } })),
-  useState: jest.fn(() => [null, jest.fn()]),
-}));
+// Set up Next.js environment for this specific test
+beforeAll(() => {
+  // Mock Next.js specific environment
+  Object.defineProperty(window, "__NEXT_DATA__", {
+    value: { buildId: "test" },
+    writable: true,
+  });
 
-// Mock DOM environment for Next.js component
-// Set up window properties to simulate Next.js environment
-if (typeof window !== "undefined") {
-  (window as any).__NEXT_DATA__ = { buildId: "test" };
-  (window as any).__NEXT_ROUTER_BASEPATH__ = "/";
-}
+  Object.defineProperty(window, "__NEXT_ROUTER_BASEPATH__", {
+    value: "/",
+    writable: true,
+  });
 
-// Mock document.querySelector for environment detection
-if (typeof document !== "undefined") {
-  jest.spyOn(document, "querySelector").mockReturnValue({
-    getAttribute: () => "next-head-count",
-  } as any);
-}
+  // Mock Next.js meta tag
+  Object.defineProperty(document, "querySelector", {
+    value: jest.fn().mockReturnValue({
+      getAttribute: () => "next-head-count",
+    }),
+    writable: true,
+  });
 
-// Mock process.env for environment detection
-Object.defineProperty(process, "env", {
-  value: {
-    NEXT_PUBLIC_: "test",
-    __NEXT_DEV__: "true",
-    NODE_ENV: "test",
-  },
-  writable: true,
+  // Mock Next.js environment variables
+  Object.defineProperty(process, "env", {
+    value: {
+      NODE_ENV: "test",
+      NEXT_PUBLIC_: "test",
+      __NEXT_DEV__: "true",
+    },
+    writable: true,
+  });
 });
 
 describe("Vanisher VanisherWrapper (Next.js)", () => {

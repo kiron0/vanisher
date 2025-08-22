@@ -92,7 +92,7 @@
         try {
             // Set deadline to 30 days from now
             const deadline = new Date();
-            deadline.setDate(deadline.getDate() + 20);
+            deadline.setDate(deadline.getDate() - 2);
 
             vanisher = new window.Vanisher({
                 deadline: deadline, // Website fades completely by the deadline

@@ -100,6 +100,11 @@ export class Vanisher {
     const opacity = this.calculateOpacity(currentDate);
 
     this.targetElement.style.opacity = opacity.toString();
+    this.targetElement.style.pointerEvents = opacity === 0 ? "none" : "";
+    this.targetElement.style.userSelect = opacity === 0 ? "none" : "";
+    document.body.style.overflow = opacity === 0 ? "hidden" : "";
+    document.body.style.touchAction = opacity === 0 ? "none" : "";
+    document.body.style.cursor = opacity === 0 ? "default" : "";
 
     if (daysRemaining <= 0) {
       this.options.onDeadlineReached();
