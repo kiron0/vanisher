@@ -38,7 +38,8 @@
     "prepack": "npm run build",
     "postpack": "rm -rf dist",
     "clean": "rm -rf dist coverage",
-    "prepare": "npm run build"
+    "prepare": "npm run build",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "keywords": [
     "vanisher",
@@ -80,6 +81,7 @@
     "@types/react": "^19.1.10",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
+    "prettier": "^3.6.2",
     "rollup": "^4.47.1",
     "rollup-plugin-dts": "^6.2.3",
     "rollup-plugin-terser": "^7.0.2",

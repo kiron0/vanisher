@@ -27,24 +27,24 @@ npm install vanisher
 #### Basic Usage
 
 ```typescript
-import { createVanisher } from 'vanisher';
+import { createVanisher } from "vanisher";
 
 const vanisher = createVanisher({
-  deadline: new Date('2024-12-31')
+  deadline: new Date("2024-12-31"),
 });
 ```
 
 #### Advanced Configuration
 
 ```typescript
-import { Vanisher } from 'vanisher';
+import { Vanisher } from "vanisher";
 
 const vanisher = new Vanisher({
-  deadline: new Date('2024-12-31'),
-  targetElement: '#main-content', // or HTMLElement
+  deadline: new Date("2024-12-31"),
+  targetElement: "#main-content", // or HTMLElement
   onDeadlineReached: () => {
-    console.log('Website has completely faded away!');
-  }
+    console.log("Website has completely faded away!");
+  },
 });
 
 // Get current status
@@ -54,7 +54,7 @@ console.log(status);
 
 // Update options dynamically
 vanisher.updateOptions({
-  deadline: new Date('2025-01-15')
+  deadline: new Date("2025-01-15"),
 });
 
 // Reset to maximum opacity
@@ -68,24 +68,25 @@ The Vanisher class validates the deadline date and throws errors for invalid con
 ```typescript
 try {
   const vanisher = new Vanisher({
-    deadline: 'invalid-date', // Invalid date - will throw error
+    deadline: "invalid-date", // Invalid date - will throw error
   });
 } catch (error) {
-  console.error('Validation error:', error.message);
+  console.error("Validation error:", error.message);
   // Output: "Invalid deadline date provided. Please provide a valid Date object or date string."
 }
 
 // Valid usage with error handling
 try {
   const vanisher = new Vanisher({
-    deadline: new Date('2025-12-31'), // Any valid date - will work
+    deadline: new Date("2025-12-31"), // Any valid date - will work
   });
 } catch (error) {
-  console.error('Error initializing Vanisher:', error.message);
+  console.error("Error initializing Vanisher:", error.message);
 }
 ```
 
 **Common validation errors:**
+
 - **Invalid date**: Invalid date string or Date object
 
 **Note:** Past dates are now allowed to enable recovery after deadline expiration.
@@ -95,16 +96,16 @@ try {
 #### Basic React Component
 
 ```tsx
-import { VanisherWrapper } from 'vanisher/react';
+import { VanisherWrapper } from "vanisher/react";
 
 function App() {
   return (
-          <VanisherWrapper
-        deadline={new Date('2024-12-31')}
-        onDeadlineReached={() => alert('Time is up!')}
-      >
-        <div>Your website content here</div>
-      </VanisherWrapper>
+    <VanisherWrapper
+      deadline={new Date("2024-12-31")}
+      onDeadlineReached={() => alert("Time is up!")}
+    >
+      <div>Your website content here</div>
+    </VanisherWrapper>
   );
 }
 ```
@@ -114,21 +115,19 @@ function App() {
 #### Advanced React Usage
 
 ```tsx
-import { VanisherWrapper } from 'vanisher/react';
+import { VanisherWrapper } from "vanisher/react";
 
 function App() {
   const handleDeadlineReached = () => {
-    alert('Website has completely faded away!');
+    alert("Website has completely faded away!");
   };
 
   return (
     <VanisherWrapper
-      deadline={new Date('2024-12-31')}
-      minOpacity={0.2}
-      maxOpacity={1.0}
+      deadline={new Date("2024-12-31")}
       onDeadlineReached={handleDeadlineReached}
       className="fade-container"
-      style={{ minHeight: '100vh' }}
+      style={{ minHeight: "100vh" }}
     >
       <header>Your Website</header>
       <main>Main content that will fade away</main>
@@ -143,16 +142,16 @@ function App() {
 #### Basic Next.js Component
 
 ```tsx
-import { VanisherWrapper } from 'vanisher/next';
+import { VanisherWrapper } from "vanisher/next";
 
 function NextJSPage() {
   return (
-          <VanisherWrapper
-        deadline={new Date('2024-12-31')}
-        onDeadlineReached={() => alert('Time is up!')}
-      >
-        <div>Your Next.js page content here</div>
-      </VanisherWrapper>
+    <VanisherWrapper
+      deadline={new Date("2024-12-31")}
+      onDeadlineReached={() => alert("Time is up!")}
+    >
+      <div>Your Next.js page content here</div>
+    </VanisherWrapper>
   );
 }
 ```
@@ -166,18 +165,18 @@ function NextJSPage() {
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Fading Website</title>
-</head>
-<body>
-  <h1>This website will fade away</h1>
-  <p>Content here...</p>
+  <head>
+    <title>Fading Website</title>
+  </head>
+  <body>
+    <h1>This website will fade away</h1>
+    <p>Content here...</p>
 
-  <script
-    src="https://unpkg.com/vanisher@latest/dist/index.js"
-    data-deadline="2024-12-31">
-  </script>
-</body>
+    <script
+      src="https://unpkg.com/vanisher@latest/dist/index.js"
+      data-deadline="2024-12-31"
+    ></script>
+  </body>
 </html>
 ```
 
@@ -186,24 +185,24 @@ function NextJSPage() {
 ```html
 <!DOCTYPE html>
 <html>
-<head>
-  <title>Fading Website</title>
-</head>
-<body>
-  <h1>This website will fade away</h1>
-  <p>Content here...</p>
+  <head>
+    <title>Fading Website</title>
+  </head>
+  <body>
+    <h1>This website will fade away</h1>
+    <p>Content here...</p>
 
-  <script src="https://unpkg.com/vanisher@latest/dist/index.js"></script>
-  <script>
-    // Initialize manually
-    const vanisher = new Vanisher({
-  deadline: '2024-12-31',
-  onDeadlineReached: () => {
-    alert('Website has completely faded away!');
-  }
-});
-  </script>
-</body>
+    <script src="https://unpkg.com/vanisher@latest/dist/index.js"></script>
+    <script>
+      // Initialize manually
+      const vanisher = new Vanisher({
+        deadline: "2024-12-31",
+        onDeadlineReached: () => {
+          alert("Website has completely faded away!");
+        },
+      });
+    </script>
+  </body>
 </html>
 ```
 
@@ -213,11 +212,11 @@ function NextJSPage() {
 
 #### Constructor Options
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `deadline` | `Date \| string` | Required | Date when website should be completely faded (past dates allowed for recovery) |
-| `targetElement` | `string \| HTMLElement` | `'body'` | Element to apply opacity to |
-| `onDeadlineReached` | `function` | `() => {}` | Callback when deadline is reached |
+| Option              | Type                    | Default    | Description                                                                    |
+| ------------------- | ----------------------- | ---------- | ------------------------------------------------------------------------------ |
+| `deadline`          | `Date \| string`        | Required   | Date when website should be completely faded (past dates allowed for recovery) |
+| `targetElement`     | `string \| HTMLElement` | `'body'`   | Element to apply opacity to                                                    |
+| `onDeadlineReached` | `function`              | `() => {}` | Callback when deadline is reached                                              |
 
 #### Methods
 
@@ -231,42 +230,42 @@ function NextJSPage() {
 
 Extends `VanisherOptions` with React-specific props:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `children` | `ReactNode` | - | Content to wrap |
-| `className` | `string` | `''` | CSS class names |
-| `style` | `CSSProperties` | `{}` | Inline styles |
+| Prop        | Type            | Default | Description     |
+| ----------- | --------------- | ------- | --------------- |
+| `children`  | `ReactNode`     | -       | Content to wrap |
+| `className` | `string`        | `''`    | CSS class names |
+| `style`     | `CSSProperties` | `{}`    | Inline styles   |
 
 ## Examples
 
 ### Invoice Overdue Scenario
 
 ```typescript
-import { createVanisher } from 'vanisher';
+import { createVanisher } from "vanisher";
 
 // Start fading immediately, complete by December 31st
 const invoiceFade = createVanisher({
-  deadline: new Date('2024-12-31'),
+  deadline: new Date("2024-12-31"),
   onDeadlineReached: () => {
     // Redirect to payment page or show payment modal
-    window.location.href = '/payment';
-  }
+    window.location.href = "/payment";
+  },
 });
 ```
 
 ### Limited Time Offer
 
 ```tsx
-import { VanisherWrapper } from 'vanisher/react';
+import { VanisherWrapper } from "vanisher/react";
 
 function LimitedOffer() {
   return (
-          <VanisherWrapper
-        deadline={new Date('2024-12-31')}
-        onDeadlineReached={() => {
-          alert('Offer expired!');
-        }}
-      >
+    <VanisherWrapper
+      deadline={new Date("2024-12-31")}
+      onDeadlineReached={() => {
+        alert("Offer expired!");
+      }}
+    >
       <div className="offer-banner">
         <h2>🎉 Special Offer!</h2>
         <p>This offer is fading away...</p>
@@ -280,32 +279,34 @@ function LimitedOffer() {
 ### Custom Element Targeting
 
 ```typescript
-import { Vanisher } from 'vanisher';
+import { Vanisher } from "vanisher";
 
 // Fade only the main content, not the navigation
 const contentFade = new Vanisher({
-  deadline: new Date('2024-12-31'),
-  targetElement: '#main-content'
+  deadline: new Date("2024-12-31"),
+  targetElement: "#main-content",
 });
 ```
 
 ### Dynamic Updates
 
 ```typescript
-import { Vanisher } from 'vanisher';
+import { Vanisher } from "vanisher";
 
 const vanisher = new Vanisher({
-  deadline: new Date('2024-12-31')
+  deadline: new Date("2024-12-31"),
 });
 
 // Extend the deadline
 vanisher.updateOptions({
-  deadline: new Date('2025-01-15')
+  deadline: new Date("2025-01-15"),
 });
 
 // Check current status
 const status = vanisher.getStatus();
-console.log(`Days remaining: ${status.daysRemaining}, Opacity: ${status.opacity}`);
+console.log(
+  `Days remaining: ${status.daysRemaining}, Opacity: ${status.opacity}`,
+);
 
 // Reset to full opacity
 vanisher.reset();
@@ -317,7 +318,7 @@ You can extend deadlines even after they've passed:
 
 ```typescript
 const vanisher = new Vanisher({
-  deadline: new Date('2024-12-01') // Past deadline - website invisible
+  deadline: new Date("2024-12-01"), // Past deadline - website invisible
 });
 
 // Later, user pays invoice - extend deadline
@@ -326,7 +327,7 @@ function onPaymentReceived() {
   newDeadline.setDate(newDeadline.getDate() + 30); // 30 days from now
 
   vanisher.updateOptions({
-    deadline: newDeadline
+    deadline: newDeadline,
   });
   // Website immediately becomes visible and starts fading to new deadline!
 }
@@ -357,16 +358,19 @@ This ensures predictable behavior: past deadlines = invisible, future deadlines 
 The package includes intelligent environment detection to prevent misuse:
 
 ### 🚨 React Component in Next.js
+
 - **Warning**: Console error + browser alert in development
 - **Error**: Runtime error in production
 - **Fix**: Use `vanisher/next` instead
 
 ### 🚨 Next.js Component in React
+
 - **Warning**: Console error + browser alert in development
 - **Error**: Runtime error in production
 - **Fix**: Use `vanisher/react` instead
 
 ### ✅ Correct Usage
+
 - **React projects**: `import { VanisherWrapper } from 'vanisher/react'`
 - **Next.js projects**: `import { VanisherWrapper } from 'vanisher/next'`
 - **Vanilla JS/TS**: `import { Vanisher } from 'vanisher'`
@@ -396,11 +400,14 @@ npm run type-check
 
 # Run tests
 npm test
+
+# Format code
+npm run format
 ```
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+MIT License - see [LICENSE](https://github.com/kiron0/vanisher/blob/main/LICENSE) file for details.
 
 ## Contributing
 
