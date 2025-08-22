@@ -1,0 +1,95 @@
+{
+  "name": "vanisher",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "A TypeScript package that gradually vanishes websites by decreasing body opacity daily until a deadline",
+  "main": "dist/index.cjs",
+  "module": "dist/index.esm.js",
+  "unpkg": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.esm.js",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./react": {
+      "import": "./dist/react.esm.js",
+      "require": "./dist/react.js",
+      "types": "./dist/react.d.ts"
+    },
+    "./next": {
+      "import": "./dist/next.esm.js",
+      "require": "./dist/next.js",
+      "types": "./dist/next.d.ts"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "rollup -c",
+    "dev": "rollup -c -w",
+    "type-check": "tsc --noEmit",
+    "test": "jest",
+    "prepublishOnly": "npm run build",
+    "prepack": "npm run build",
+    "postpack": "rm -rf dist",
+    "clean": "rm -rf dist coverage",
+    "prepare": "npm run build"
+  },
+  "keywords": [
+    "vanisher",
+    "opacity",
+    "deadline",
+    "website",
+    "typescript",
+    "browser",
+    "react",
+    "jsx",
+    "tsx",
+    "nextjs",
+    "fade",
+    "countdown",
+    "timer",
+    "website-vanish",
+    "opacity-control",
+    "deadline-timer",
+    "react-component",
+    "nextjs-component",
+    "website-vanisher"
+  ],
+  "author": "Toufiq Hasan Kiron",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kiron0/vanisher.git"
+  },
+  "homepage": "https://github.com/kiron0/vanisher#readme",
+  "bugs": {
+    "url": "https://github.com/kiron0/vanisher/issues"
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^28.0.6",
+    "@rollup/plugin-node-resolve": "^16.0.1",
+    "@rollup/plugin-typescript": "^12.1.4",
+    "@testing-library/jest-dom": "^6.8.0",
+    "@types/jest": "^30.0.0",
+    "@types/react": "^19.1.10",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "rollup": "^4.47.1",
+    "rollup-plugin-dts": "^6.2.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "ts-jest": "^29.4.1",
+    "typescript": "^5.9.2"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

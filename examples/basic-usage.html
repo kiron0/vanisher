@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vanisher - Basic Example</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        .status {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+        }
+        .warning {
+            background: rgba(255, 193, 7, 0.2);
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px;
+        }
+        button:hover {
+            background: #218838;
+        }
+        button:disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🌅 Vanisher Demo</h1>
+        <p>This website will gradually fade away until the deadline is reached.</p>
+
+        <div class="status" id="status">
+            <strong>Status:</strong> Loading...
+        </div>
+
+        <div class="warning">
+            <strong>⚠️ Warning:</strong> This is a demonstration. In a real scenario,
+            this would be used for unpaid invoices, expiring offers, or time-sensitive content.
+        </div>
+
+        <div>
+            <button onclick="showStatus()">Show Current Status</button>
+            <button onclick="updateDeadline()">Extend Deadline</button>
+            <button onclick="resetFade()">Reset Fade</button>
+        </div>
+
+        <div style="margin-top: 40px;">
+            <h3>How it works:</h3>
+            <ul style="text-align: left; display: inline-block;">
+                <li>Set a deadline date when the website should be completely faded</li>
+                <li>Website opacity decreases gradually from initialization to deadline</li>
+                <li>Fading period automatically adjusts based on your deadline - no hardcoded timeframes</li>
+                <li>Perfect for creating urgency and encouraging action</li>
+                <li>Customizable target elements and opacity ranges</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Load the vanisher package -->
+    <script src="../dist/index.js"></script>
+    <script>
+        let vanisher;
+
+        // Initialize vanisher with error handling
+        try {
+            // Set deadline to 30 days from now
+            const deadline = new Date();
+            deadline.setDate(deadline.getDate() + 20);
+
+            vanisher = new window.Vanisher({
+                deadline: deadline, // Website fades completely by the deadline
+                onDeadlineReached: () => {
+                    alert('⚠️ Website has completely faded away! This would typically redirect to a payment page.');
+                }
+            });
+
+            // Initial status update
+            updateStatus();
+        } catch (error) {
+            console.error('Error initializing Vanisher:', error.message);
+            alert('Error: ' + error.message);
+        }
+
+        function updateStatus() {
+            if (!vanisher) return;
+
+            const status = vanisher.getStatus();
+            const statusEl = document.getElementById('status');
+            const percentage = Math.round(status.opacity * 100);
+
+            statusEl.innerHTML = `
+                <strong>Status:</strong><br>
+                Opacity: ${percentage}%<br>
+                Days remaining: ${status.daysRemaining}<br>
+                Active: ${status.isActive ? 'Yes' : 'No'}<br>
+                Deadline: ${vanisher.getDeadlineDate().toLocaleDateString()}
+            `;
+        }
+
+        function showStatus() {
+            if (!vanisher) return;
+
+            const status = vanisher.getStatus();
+            const deadline = vanisher.getDeadlineDate();
+            alert(`Current Status:\nOpacity: ${Math.round(status.opacity * 100)}%\nDays Remaining: ${status.daysRemaining}\nActive: ${status.isActive}\nDeadline: ${deadline.toLocaleDateString()}`);
+        }
+
+        function updateDeadline() {
+            if (!vanisher) return;
+
+            const newDeadline = prompt('Enter new deadline (YYYY-MM-DD):', '2024-12-31');
+            if (newDeadline) {
+                try {
+                    vanisher.updateOptions({
+                        deadline: new Date(newDeadline)
+                    });
+                    alert('Deadline updated!');
+                    updateStatus();
+                } catch (error) {
+                    alert('Error updating deadline: ' + error.message);
+                }
+            }
+        }
+
+        function resetFade() {
+            if (!vanisher) return;
+
+            vanisher.reset();
+            alert('Fade reset! Starting countdown from now.');
+            updateStatus();
+        }
+
+        // Update status every second for demo purposes
+        setInterval(updateStatus, 1000);
+    </script>
+</body>
+</html>

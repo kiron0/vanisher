@@ -1,0 +1,58 @@
+# Source files
+src/
+tests/
+
+# Development files
+*.config.js
+*.config.cjs
+*.config.ts
+.eslintrc*
+.prettierrc*
+tsconfig.json
+
+# Build tools
+rollup.config.js
+rollup.config.cjs
+
+# Test tools
+jest.config.js
+jest.config.cjs
+
+# Development dependencies
+node_modules/
+
+# Test files
+coverage/
+*.test.ts
+*.test.tsx
+*.spec.ts
+*.spec.tsx
+
+# Development scripts
+server.js
+demo.html
+examples/
+
+# Git files
+.git/
+.gitignore
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Temporary files
+*.tmp
+*.temp
