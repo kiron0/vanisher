@@ -13,10 +13,12 @@ tsconfig.json
 # Build tools
 rollup.config.js
 rollup.config.cjs
+rollup.config.ts
 
 # Test tools
 jest.config.js
 jest.config.cjs
+jest.config.ts
 
 # Development dependencies
 node_modules/
