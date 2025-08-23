@@ -5,7 +5,7 @@ export default defineConfig({
   description:
     "Gradually fade out websites and elements with deadline-based opacity control",
 
-  base: "/vanisher/",
+  base: "/",
 
   appearance: true,
   cleanUrls: true,
