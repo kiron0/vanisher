@@ -8,7 +8,7 @@ hero:
   text: Fade out by deadline
   tagline: Gradually reduce opacity over time until a specified deadline. Perfect for unpaid invoices, expiring offers, or time-sensitive content.
   image:
-    src: "/vanisher/logo.png"
+    src: "/logo.png"
     alt: "VanisherJS Logo"
     width: 1024
     height: 1024

@@ -12,8 +12,8 @@ export default defineConfig({
   metaChunk: true,
 
   head: [
-    ["link", { rel: "icon", href: "/vanisher/logo.png" }],
-    ["link", { rel: "apple-touch-icon", href: "/vanisher/logo.png" }],
+    ["link", { rel: "icon", href: "/logo.png" }],
+    ["link", { rel: "apple-touch-icon", href: "/logo.png" }],
     ["meta", { property: "og:type", content: "website" }],
     [
       "meta",
@@ -30,7 +30,7 @@ export default defineConfig({
           "Gradually fade out websites and elements with deadline-based opacity control",
       },
     ],
-    ["meta", { property: "og:image", content: "/vanisher/og-image.png" }],
+    ["meta", { property: "og:image", content: "/og-image.png" }],
     ["meta", { property: "og:url", content: "https://vanisher.js.org" }],
     // Twitter
     ["meta", { name: "twitter:card", content: "summary_large_image" }],
@@ -49,12 +49,12 @@ export default defineConfig({
           "Gradually fade out websites and elements with deadline-based opacity control",
       },
     ],
-    ["meta", { name: "twitter:image", content: "/vanisher/og-image.png" }],
+    ["meta", { name: "twitter:image", content: "/og-image.png" }],
   ],
 
   themeConfig: {
     logo: {
-      src: "/vanisher/logo.png",
+      src: "/logo.png",
       alt: "VanisherJS Logo",
     },
     siteTitle: "VanisherJS",
