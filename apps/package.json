@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --noEmit"
   },
   "devDependencies": {
-    "vitepress": "^2.0.0-alpha.12"
+    "vitepress": "^2.0.0-alpha.12",
+    "vue-tsc": "^2.0.0"
   }
 }
