@@ -1,0 +1,77 @@
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(
+    120deg,
+    #f97015 30%,
+    #f97115
+  );
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    #f97015 50%,
+    #f97115 50%
+  );
+  --vp-home-hero-image-filter: blur(44px);
+
+  --vp-c-brand-1: #f97015;
+  --vp-c-brand-2: #f97015;
+
+  --vp-button-brand-bg: #f97015;
+  --vp-button-brand-hover-bg: #f97015;
+
+  --vp-font-family-base: "Space Grotesk", sans-serif;
+}
+
+.dark {
+  --vp-c-neutral-1: #000;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --vp-home-hero-image-filter: blur(56px);
+  }
+}
+
+@media (min-width: 960px) {
+  :root {
+    --vp-home-hero-image-filter: blur(68px);
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.VPHome .VPHomeHero .container .main {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.VPHome .VPHomeFeatures .container .items {
+  display: grid !important;
+  grid-template-columns: repeat(1, 1fr) !important;
+}
+
+.VPHome .VPHomeFeatures .container .items .item {
+  width: 100% !important;
+}
+
+@media (min-width: 768px) {
+  .VPHome .VPHomeFeatures .container .items {
+    grid-template-columns: repeat(2, 1fr) !important;
+  }
+}
+
+/* Large devices (desktops, 1024px and up) */
+@media (min-width: 1024px) {
+  .VPHome .VPHomeFeatures .container .items {
+    grid-template-columns: repeat(3, 1fr) !important;
+  }
+}

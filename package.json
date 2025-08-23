@@ -1,96 +1,41 @@
 {
   "name": "vanisher",
-  "version": "1.0.1",
+  "version": "1.0.0",
+  "private": true,
   "type": "module",
-  "description": "Gradually fades out any website or element by reducing opacity over time until a specified deadline. Perfect for unpaid invoices, expiring offers, or time-sensitive content. Includes React and Next.js components, dynamic updates, and full TypeScript support.",
-  "main": "dist/index.cjs",
-  "module": "dist/index.esm.js",
-  "unpkg": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.esm.js",
-      "require": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    },
-    "./react": {
-      "import": "./dist/react.esm.js",
-      "require": "./dist/react.js",
-      "types": "./dist/react.d.ts"
-    },
-    "./next": {
-      "import": "./dist/next.esm.js",
-      "require": "./dist/next.js",
-      "types": "./dist/next.d.ts"
-    }
-  },
-  "files": [
-    "dist",
-    "README.md",
-    "LICENSE"
+  "description": "Monorepo for Vanisher package and documentation",
+  "workspaces": [
+    "packages",
+    "apps"
   ],
   "scripts": {
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
-    "type-check": "tsc --noEmit",
-    "test": "jest",
-    "format": "prettier --write \"**/*.{ts,tsx,json,md}\""
+    "build": "npm run build --workspaces",
+    "dev": "npm run dev --workspaces",
+    "test": "npm run test --workspaces",
+    "type-check": "npm run type-check --workspaces",
+    "docs:dev": "npm run dev --workspace=apps",
+    "docs:build": "npm run build --workspace=apps",
+    "docs:preview": "npm run preview --workspace=apps",
+    "package:build": "npm run build --workspace=packages",
+    "package:publish": "npm publish --workspace=packages"
   },
   "keywords": [
+    "monorepo",
     "vanisher",
-    "opacity",
-    "deadline",
-    "website",
-    "typescript",
-    "browser",
-    "react",
-    "jsx",
-    "tsx",
-    "nextjs",
-    "fade",
-    "countdown",
-    "timer",
-    "website-vanish",
-    "opacity-control",
-    "deadline-timer",
-    "react-component",
-    "nextjs-component",
-    "website-vanisher"
+    "documentation",
+    "vitePress"
   ],
   "author": "Toufiq Hasan Kiron",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiron0/vanisher.git"
+    "url": "https://github.com/kiron0/vanisher/tree/main/packages"
   },
-  "homepage": "https://github.com/kiron0/vanisher#readme",
+  "homepage": "https://github.com/kiron0/vanisher/tree/main/packages#readme",
   "bugs": {
-    "url": "https://github.com/kiron0/vanisher/issues"
+    "url": "https://github.com/kiron0/vanisher/tree/main/packages/issues"
   },
   "engines": {
     "node": ">=14.0.0"
-  },
-  "peerDependencies": {
-    "react": "^18.0.0 || ^19.0.0",
-    "react-dom": "^18.0.0 || ^19.0.0"
-  },
-  "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.6",
-    "@rollup/plugin-node-resolve": "^16.0.1",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-typescript": "^12.1.4",
-    "@testing-library/jest-dom": "^6.8.0",
-    "@types/jest": "^30.0.0",
-    "@types/react": "^18.2.0 || ^19.0.0",
-    "@types/react-dom": "^18.2.0 || ^19.0.0",
-    "jest": "^30.0.5",
-    "jest-environment-jsdom": "^30.0.5",
-    "prettier": "^3.6.2",
-    "react": "^19.1.1",
-    "react-dom": "^19.1.1",
-    "rollup": "^4.47.1",
-    "rollup-plugin-dts": "^6.2.3",
-    "ts-jest": "^29.4.1",
-    "typescript": "^5.9.2"
   }
 }
