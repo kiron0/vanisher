@@ -61,11 +61,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/kiron0/vanisher/tree/main/packages"
+    "url": "https://github.com/kiron0/vanisher"
   },
-  "homepage": "https://github.com/kiron0/vanisher/tree/main/packages#readme",
+  "homepage": "https://vanisher.js.org",
   "bugs": {
-    "url": "https://github.com/kiron0/vanisher/tree/main/packages/issues"
+    "url": "https://github.com/kiron0/vanisher/issues"
   },
   "engines": {
     "node": ">=14.0.0"
