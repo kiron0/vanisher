@@ -2,15 +2,15 @@
 
 A JavaScript library that gradually fades out websites and elements based on specified deadlines. Perfect for creating urgency, managing time-sensitive content, or implementing creative fade effects.
 
-## ✨ Features
+## Features
 
-- 🎯 Deadline-based opacity control
-- ⚡ Lightweight with zero dependencies
-- 🧩 Framework agnostic (vanilla JS, React, Next.js)
-- 🔧 Full TypeScript support
-- 📱 Responsive and customizable
+- Deadline-based opacity control
+- Lightweight with zero dependencies
+- Framework agnostic (vanilla JS, React, Next.js)
+- Full TypeScript support
+- Responsive and customizable
 
-## 🚀 Quick Start
+## Quick Start
 
 ```bash
 npm install vanisher
@@ -25,41 +25,11 @@ const vanisher = createVanisher({
 });
 ```
 
-## 📚 Documentation
+## Documentation
 
-📖 **[Full Documentation](https://vanisher.js.org)** - Complete guides, API reference, and examples
+**[Full Documentation](https://vanisher.js.org)** - Complete guides, API reference, and examples
 
-
-## 🛠️ Development
-
-```bash
-# Install dependencies
-npm install
-
-# Start docs dev server
-npm run docs:dev
-
-# Build package
-npm run package:build
-
-# Run tests
-npm run test
-```
-
-## 📦 Package Exports
-
-```javascript
-// Core functionality
-import { createVanisher } from 'vanisher';
-
-// React components
-import { VanisherReactWrapper } from 'vanisher/react';
-
-// Next.js components
-import { VanisherNextWrapper } from 'vanisher/next';
-```
-
-## 📄 License
+## License
 
 MIT License - see [LICENSE](./LICENSE) for details.
 
