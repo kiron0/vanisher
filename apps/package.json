@@ -7,11 +7,9 @@
   "scripts": {
     "dev": "vitepress dev",
     "build": "vitepress build",
-    "preview": "vitepress preview",
-    "type-check": "vue-tsc --noEmit"
+    "preview": "vitepress preview"
   },
   "devDependencies": {
-    "vitepress": "^2.0.0-alpha.11",
-    "vue-tsc": "^2.2.12"
+    "vitepress": "^2.0.0-alpha.11"
   }
 }
