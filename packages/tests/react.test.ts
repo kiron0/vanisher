@@ -26,7 +26,9 @@ describe("Vanisher VanisherReactWrapper (React)", () => {
 
   it("should be defined and exportable", () => {
     expect(VanisherReactWrapper).toBeDefined();
-    expect(typeof VanisherReactWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherReactWrapper).toBe("object");
+    expect(VanisherReactWrapper).toHaveProperty("$$typeof");
   });
 
   it("should have correct component interface", () => {
@@ -38,16 +40,19 @@ describe("Vanisher VanisherReactWrapper (React)", () => {
       };
 
       expect(VanisherReactWrapper).toBeDefined();
-      expect(typeof VanisherReactWrapper).toBe("function");
+      // React.memo returns an object, not a function
+      expect(typeof VanisherReactWrapper).toBe("object");
     }).not.toThrow();
   });
 
   it("should export component with correct name", () => {
-    expect(VanisherReactWrapper.name).toBe("VanisherReactWrapper");
+    // React.memo wraps the component, so we access the displayName
+    expect(VanisherReactWrapper.displayName).toBe("VanisherReactWrapper");
   });
 
   it("should be a React functional component", () => {
-    expect(typeof VanisherReactWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherReactWrapper).toBe("object");
 
     expect(() => {
       const component = VanisherReactWrapper;
@@ -57,6 +62,7 @@ describe("Vanisher VanisherReactWrapper (React)", () => {
 
   it("should handle environment detection", () => {
     expect(VanisherReactWrapper).toBeDefined();
-    expect(typeof VanisherReactWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherReactWrapper).toBe("object");
   });
 });

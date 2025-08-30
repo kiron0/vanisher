@@ -19,6 +19,8 @@ dist/
 build/
 *.tsbuildinfo
 
+.rollup.cache/
+
 # Test coverage
 coverage/
 *.lcov

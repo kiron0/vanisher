@@ -1,6 +1,6 @@
 {
   "name": "vanisher",
-  "version": "1.0.1",
+  "version": "1.0.3",
   "type": "module",
   "description": "Gradually fades out any website or element by reducing opacity over time until a specified deadline. Perfect for unpaid invoices, expiring offers, or time-sensitive content. Includes React and Next.js components, dynamic updates, and full TypeScript support.",
   "main": "dist/index.cjs",

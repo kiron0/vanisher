@@ -2,14 +2,6 @@
 // This file runs before each test file
 import "@testing-library/jest-dom";
 
-// Mock React for testing environment
-jest.mock("react", () => ({
-  ...jest.requireActual("react"),
-  useEffect: jest.fn((fn) => fn()),
-  useRef: jest.fn(() => ({ current: { style: {} } })),
-  useState: jest.fn(() => [null, jest.fn()]),
-}));
-
 // Mock console methods to reduce noise in tests
 global.console = {
   ...console,
@@ -19,9 +11,9 @@ global.console = {
   // error: jest.fn(),
 };
 
-// Mock Date.now() for consistent testing
-const mockDate = new Date("2024-01-15T12:00:00Z");
-jest.spyOn(Date, "now").mockImplementation(() => mockDate.getTime());
+// Mock Date.now() for consistent testing - but allow override in individual tests
+// const mockDate = new Date("2024-01-15T12:00:00Z");
+// jest.spyOn(Date, "now").mockImplementation(() => mockDate.getTime());
 
 // Mock performance.now() if needed
 if (typeof performance !== "undefined") {
@@ -53,4 +45,26 @@ Object.defineProperty(process, "env", {
     __NEXT_DEV__: undefined,
   },
   writable: true,
+});
+
+// Reset environment detection cache before each test
+beforeEach(() => {
+  // Reset cache for environment detection
+  jest.clearAllMocks();
+
+  // Clear any warning registry
+  try {
+    const { clearWarningRegistry } = require("../src/utils/warnings");
+    clearWarningRegistry();
+  } catch (e) {
+    // Ignore if not available
+  }
+
+  // Reset environment detection cache
+  try {
+    const { resetCache } = require("../src/utils/env");
+    resetCache();
+  } catch (e) {
+    // Ignore if not available
+  }
 });

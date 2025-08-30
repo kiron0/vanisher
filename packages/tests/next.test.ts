@@ -54,22 +54,27 @@ describe("Vanisher VanisherNextWrapper (Next.js)", () => {
 
   it("should be defined and exportable", () => {
     expect(VanisherNextWrapper).toBeDefined();
-    expect(typeof VanisherNextWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherNextWrapper).toBe("object");
+    expect(VanisherNextWrapper).toHaveProperty("$$typeof");
   });
 
   it("should have correct component interface", () => {
     expect(() => {
       expect(VanisherNextWrapper).toBeDefined();
-      expect(typeof VanisherNextWrapper).toBe("function");
+      // React.memo returns an object, not a function
+      expect(typeof VanisherNextWrapper).toBe("object");
     }).not.toThrow();
   });
 
   it("should export component with correct name", () => {
-    expect(VanisherNextWrapper.name).toBe("VanisherNextWrapper");
+    // React.memo wraps the component, so we access the displayName
+    expect(VanisherNextWrapper.displayName).toBe("VanisherNextWrapper");
   });
 
   it("should be a React functional component", () => {
-    expect(typeof VanisherNextWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherNextWrapper).toBe("object");
 
     expect(() => {
       const component = VanisherNextWrapper;
@@ -79,7 +84,8 @@ describe("Vanisher VanisherNextWrapper (Next.js)", () => {
 
   it("should handle hydration safety", () => {
     expect(VanisherNextWrapper).toBeDefined();
-    expect(typeof VanisherNextWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherNextWrapper).toBe("object");
   });
 
   it("should detect Next.js environment correctly", () => {

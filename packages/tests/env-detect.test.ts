@@ -11,13 +11,15 @@ describe("Vanisher Environment Detection Components", () => {
   it("should export React component", async () => {
     const { VanisherReactWrapper } = await import("../src/react");
     expect(VanisherReactWrapper).toBeDefined();
-    expect(typeof VanisherReactWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherReactWrapper).toBe("object");
   });
 
   it("should export Next.js component", async () => {
     const { VanisherNextWrapper } = await import("../src/next");
     expect(VanisherNextWrapper).toBeDefined();
-    expect(typeof VanisherNextWrapper).toBe("function");
+    // React.memo returns an object, not a function
+    expect(typeof VanisherNextWrapper).toBe("object");
   });
 
   it("should have different component implementations", async () => {
@@ -26,7 +28,13 @@ describe("Vanisher Environment Detection Components", () => {
 
     expect(ReactComponent).toBeDefined();
     expect(NextComponent).toBeDefined();
-    expect(ReactComponent.toString()).not.toBe(NextComponent.toString());
+
+    // React.memo components are different objects
+    expect(ReactComponent).not.toBe(NextComponent);
+
+    // They should have different display names
+    expect(ReactComponent.displayName).toBe("VanisherReactWrapper");
+    expect(NextComponent.displayName).toBe("VanisherNextWrapper");
   });
 
   it("should both components accept deadline prop", () => {
@@ -46,10 +54,13 @@ describe("Vanisher Environment Detection Components", () => {
     const ReactComponent = (await import("../src/react")).VanisherReactWrapper;
     const NextComponent = (await import("../src/next")).VanisherNextWrapper;
 
-    const reactSource = ReactComponent.toString();
-    const nextSource = NextComponent.toString();
+    // React.memo wraps components, so we can't directly call toString()
+    // Instead, check that they have the React memo structure
+    expect(ReactComponent).toHaveProperty("$$typeof");
+    expect(NextComponent).toHaveProperty("$$typeof");
 
-    expect(reactSource.length).toBeGreaterThan(100);
-    expect(nextSource.length).toBeGreaterThan(100);
+    // Check they have different displayNames
+    expect(ReactComponent.displayName).toBe("VanisherReactWrapper");
+    expect(NextComponent.displayName).toBe("VanisherNextWrapper");
   });
 });

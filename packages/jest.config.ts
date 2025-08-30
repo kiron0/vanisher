@@ -27,8 +27,8 @@ const config: Config = {
   moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json"],
   setupFilesAfterEnv: ["<rootDir>/tests/setupTests.ts"],
   moduleNameMapper: {
-    "^react$": "<rootDir>/node_modules/react",
-    "^react-dom$": "<rootDir>/node_modules/react-dom",
+    "^react$": "<rootDir>/../node_modules/react",
+    "^react-dom$": "<rootDir>/../node_modules/react-dom",
   },
   testEnvironmentOptions: {
     customExportConditions: ["node", "node-addons"],

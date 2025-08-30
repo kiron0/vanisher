@@ -1,11 +1,18 @@
 import type { WarningConfig } from "../types";
 
+// Global warning registry to prevent duplicate warnings
+const warningRegistry = new Set<string>();
+
 const createWarningFunction = (config: WarningConfig) => {
-  let hasWarned = false;
+  const warningKey = `${config.title}-${config.currentImport}`;
 
   return () => {
-    if (hasWarned) return;
-    hasWarned = true;
+    // Prevent duplicate warnings
+    if (warningRegistry.has(warningKey)) {
+      return;
+    }
+
+    warningRegistry.add(warningKey);
 
     const warningMessage = `
 🚨 ${config.title}
@@ -20,15 +27,21 @@ Current import: ${config.currentImport}
 Recommended import: ${config.recommendedImport}
 `;
 
-    console.error(warningMessage);
+    // Use console.warn instead of console.error for better UX
+    console.warn(warningMessage);
 
+    // Only show alert in development
     if (
       process.env["NODE_ENV"] === "development" ||
       process.env["NODE_ENV"] === "test"
     ) {
-      alert(`🚨 ${config.title}! Check console for details.`);
+      // Use a more user-friendly alert
+      setTimeout(() => {
+        alert(`🚨 ${config.title}! Check console for details.`);
+      }, 100);
     }
 
+    // Throw error only in production for better debugging
     if (process.env["NODE_ENV"] === "production") {
       throw new Error(config.errorMessage);
     }
@@ -57,4 +70,14 @@ const NEXTJS_WARNING_CONFIG: WarningConfig = {
     "Next.js component cannot be used in regular React projects. Use vanisher/react instead.",
 };
 
-export { createWarningFunction, NEXTJS_WARNING_CONFIG, REACT_WARNING_CONFIG };
+// Function to clear warning registry (useful for testing)
+const clearWarningRegistry = (): void => {
+  warningRegistry.clear();
+};
+
+export {
+  clearWarningRegistry,
+  createWarningFunction,
+  NEXTJS_WARNING_CONFIG,
+  REACT_WARNING_CONFIG,
+};
