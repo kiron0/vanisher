@@ -24,6 +24,11 @@ const VanisherReactWrapper: React.FC<VanisherWrapperProps> = React.memo(
     >(null);
     const [isMounted, setIsMounted] = React.useState(false);
 
+    // Check if deadline has already passed
+    const deadlineDate =
+      typeof deadline === "string" ? new Date(deadline) : deadline;
+    const isDeadlinePassed = deadlineDate.getTime() <= Date.now();
+
     // Memoize the vanisher options to prevent unnecessary re-initialization
     const vanisherOptions = React.useMemo(
       () => ({
@@ -46,6 +51,14 @@ const VanisherReactWrapper: React.FC<VanisherWrapperProps> = React.memo(
 
       setIsMounted(true);
     }, []);
+
+    // Handle already passed deadline
+    React.useEffect(() => {
+      if (isDeadlinePassed && onDeadlineReached) {
+        // Deadline has already passed, trigger callback immediately
+        onDeadlineReached();
+      }
+    }, [isDeadlinePassed, onDeadlineReached]);
 
     // Vanisher initialization effect
     React.useEffect(() => {
@@ -85,8 +98,12 @@ const VanisherReactWrapper: React.FC<VanisherWrapperProps> = React.memo(
     const containerStyle = React.useMemo(
       () => ({
         ...style,
+        // If deadline has passed, immediately set opacity to 0
+        opacity: isDeadlinePassed ? 0 : style.opacity,
+        pointerEvents: isDeadlinePassed ? "none" : style.pointerEvents,
+        userSelect: isDeadlinePassed ? "none" : style.userSelect,
       }),
-      [style],
+      [style, isDeadlinePassed],
     );
 
     return (

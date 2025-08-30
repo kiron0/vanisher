@@ -16,6 +16,7 @@
     "docs:dev": "npm run dev --workspace=apps",
     "docs:build": "npm run build --workspace=apps",
     "docs:preview": "npm run preview --workspace=apps",
+    "package:test": "npm run test --workspace=packages",
     "package:build": "npm run build --workspace=packages",
     "package:publish": "npm publish --workspace=packages"
   },

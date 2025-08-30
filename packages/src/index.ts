@@ -135,8 +135,13 @@ class Vanisher {
     const { totalMs } = this.calculateTimeRemaining(currentTime);
     const opacity = this.calculateOpacity(currentTime);
 
-    // Only update if opacity change is significant
-    if (Math.abs(this.lastOpacity - opacity) > MIN_OPACITY_CHANGE) {
+    // Only update if opacity change is significant OR we're reaching zero
+    const shouldUpdate =
+      Math.abs(this.lastOpacity - opacity) > MIN_OPACITY_CHANGE ||
+      (opacity === 0 && this.lastOpacity > 0) ||
+      totalMs <= 0;
+
+    if (shouldUpdate) {
       this.lastOpacity = opacity;
 
       if (this.rafId) {
@@ -166,6 +171,12 @@ class Vanisher {
     }
 
     if (totalMs <= 0) {
+      // Force final opacity to 0 when deadline is reached
+      if (this.targetElement && this.targetElement.style.opacity !== "0") {
+        this.targetElement.style.opacity = "0";
+        this.targetElement.style.pointerEvents = "none";
+        this.targetElement.style.userSelect = "none";
+      }
       this.options.onDeadlineReached();
       this.stopAutoUpdater();
     }
@@ -228,6 +239,10 @@ class Vanisher {
       this.initializedAt = new Date();
       this.totalPeriod = this.calculateTotalPeriod();
       needsReinitialization = true;
+
+      // Restart the auto updater when deadline changes
+      this.stopAutoUpdater();
+      this.startAutoUpdater();
     }
 
     if (newOptions.targetElement !== undefined) {

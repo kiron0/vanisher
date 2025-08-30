@@ -1,12 +1,12 @@
 {
   "name": "vanisher",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "type": "module",
   "description": "Gradually fades out any website or element by reducing opacity over time until a specified deadline. Perfect for unpaid invoices, expiring offers, or time-sensitive content. Includes React and Next.js components, dynamic updates, and full TypeScript support.",
-  "main": "dist/index.cjs",
-  "module": "dist/index.esm.js",
-  "unpkg": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.js",
+  "module": "./dist/index.esm.js",
+  "unpkg": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.esm.js",
@@ -22,6 +22,19 @@
       "import": "./dist/next.esm.js",
       "require": "./dist/next.js",
       "types": "./dist/next.d.ts"
+    },
+    "./next.js": {
+      "import": "./dist/next.esm.js",
+      "require": "./dist/next.js"
+    },
+    "./next/index.js": {
+      "import": "./dist/next/index.js",
+      "require": "./dist/next/index.js"
+    },
+    "./next/index": {
+      "import": "./dist/next/index.js",
+      "require": "./dist/next/index.js",
+      "types": "./dist/next/index.d.ts"
     }
   },
   "files": [
