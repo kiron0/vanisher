@@ -44,6 +44,8 @@ function App() {
 ### Next.js Component
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function Page() {
