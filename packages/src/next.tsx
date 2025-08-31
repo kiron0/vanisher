@@ -1,5 +1,3 @@
-"use client";
-
 import * as React from "react";
 import { Vanisher } from "./index";
 import { type VanisherWrapperProps } from "./types";

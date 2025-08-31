@@ -48,8 +48,9 @@ const config: RollupOptions[] = [
       }),
       typescript({
         tsconfig: "./tsconfig.json",
+        outputToFilesystem: true,
         compilerOptions: {
-          declaration: true,
+          declaration: false,
           declarationMap: false,
           tsBuildInfoFile: "./.tsbuildinfo",
           verbatimModuleSyntax: false,
@@ -57,14 +58,9 @@ const config: RollupOptions[] = [
       }),
       terser({
         compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: [
-            "console.log",
-            "console.warn",
-            "console.info",
-            "console.error",
-          ],
+          drop_console: false,
+          drop_debugger: false,
+          pure_funcs: [],
           passes: 2,
           unsafe: false,
           unsafe_comps: false,
@@ -155,8 +151,9 @@ const config: RollupOptions[] = [
       }),
       typescript({
         tsconfig: "./tsconfig.json",
+        outputToFilesystem: true,
         compilerOptions: {
-          declaration: true,
+          declaration: false,
           declarationMap: false,
           tsBuildInfoFile: "./.tsbuildinfo",
           verbatimModuleSyntax: false,
@@ -164,14 +161,9 @@ const config: RollupOptions[] = [
       }),
       terser({
         compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: [
-            "console.log",
-            "console.warn",
-            "console.info",
-            "console.error",
-          ],
+          drop_console: false,
+          drop_debugger: false,
+          pure_funcs: [],
           passes: 2,
           unsafe: false,
           unsafe_comps: false,
@@ -262,8 +254,9 @@ const config: RollupOptions[] = [
       }),
       typescript({
         tsconfig: "./tsconfig.json",
+        outputToFilesystem: true,
         compilerOptions: {
-          declaration: true,
+          declaration: false,
           declarationMap: false,
           tsBuildInfoFile: "./.tsbuildinfo",
           verbatimModuleSyntax: false,
@@ -271,14 +264,9 @@ const config: RollupOptions[] = [
       }),
       terser({
         compress: {
-          drop_console: true,
-          drop_debugger: true,
-          pure_funcs: [
-            "console.log",
-            "console.warn",
-            "console.info",
-            "console.error",
-          ],
+          drop_console: false,
+          drop_debugger: false,
+          pure_funcs: [],
           passes: 2,
           unsafe: false,
           unsafe_comps: false,

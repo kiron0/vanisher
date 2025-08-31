@@ -27,7 +27,7 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "verbatimModuleSyntax": true,
+    "verbatimModuleSyntax": false,
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
     "removeComments": true,

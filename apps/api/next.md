@@ -22,6 +22,8 @@ A Next.js component that wraps content and automatically fades it out based on a
 ### Basic Usage
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function EventPage() {
@@ -37,30 +39,11 @@ export default function EventPage() {
 }
 ```
 
-### With Server-Side Rendering
-
-```jsx
-import { VanisherNextWrapper } from "vanisher/next";
-
-export default function TrialPage() {
-  return (
-    <VanisherNextWrapper
-      deadline="2024-12-31T23:59:59"
-      fallback={<div>Trial period has ended</div>}
-    >
-      <div className="trial-content">
-        <h1>Free Trial</h1>
-        <p>Enjoy premium features until December 31st</p>
-        <button>Upgrade Now</button>
-      </div>
-    </VanisherNextWrapper>
-  );
-}
-```
-
 ### With Custom Styling
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function PromotionalPage() {
@@ -86,6 +69,8 @@ export default function PromotionalPage() {
 ### With Dynamic Deadlines
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function DynamicPage({ endDate }) {
@@ -106,6 +91,8 @@ export default function DynamicPage({ endDate }) {
 ### With Callback Functions
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function CallbackPage() {
@@ -192,12 +179,44 @@ The `VanisherNextWrapper` is specifically designed for Next.js applications:
 </VanisherNextWrapper>
 ```
 
+## "use client" Directive
+
+### When to Use
+
+The `"use client"` directive is **only required** for Next.js App Router (Next.js 13+) when creating client-side components:
+
+- ✅ **Required**: App Router client components
+- ❌ **Not needed**: Pages Router components
+- ❌ **Not needed**: Regular React applications
+
+### Examples
+
+**App Router (requires directive):**
+```jsx
+"use client"; // Required for App Router
+import { VanisherNextWrapper } from "vanisher/next";
+```
+
+**Pages Router (no directive needed):**
+```jsx
+// No directive needed
+import { VanisherNextWrapper } from "vanisher/next";
+```
+
+**Regular React (no directive needed):**
+```jsx
+// No directive needed
+import { VanisherWrapper } from "vanisher/react";
+```
+
 ## Integration with Next.js Features
 
 ### App Router
 
 ```jsx
 // app/page.tsx
+"use client"; // Required for App Router client components
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function Page() {
@@ -213,6 +232,8 @@ export default function Page() {
 
 ```jsx
 // pages/index.tsx
+// No "use client" directive needed for Pages Router
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function HomePage() {

@@ -7,56 +7,55 @@ const createWarningFunction = (config: WarningConfig) => {
   const warningKey = `${config.title}-${config.currentImport}`;
 
   return () => {
-    // Prevent duplicate warnings
-    if (warningRegistry.has(warningKey)) {
+    // Prevent duplicate warnings (but allow in development for testing)
+    if (
+      warningRegistry.has(warningKey) &&
+      process.env["NODE_ENV"] === "production"
+    ) {
       return;
     }
 
     warningRegistry.add(warningKey);
 
     const warningMessage = `
-🚨 ${config.title}
+┌─────────────────────────────────────────────────────────────────┐
+│ 🚨 ${config.title.padEnd(54)} │
+└─────────────────────────────────────────────────────────────────┘
 
 ${config.message}
 
-To fix this:
-1. ${config.recommendedImport}
-2. Or use the base component: import { Vanisher } from 'vanisher'
+┌─ QUICK FIX ─────────────────────────────────────────────────────┐
+│                                                                 │
+│  ❌ Current (incompatible):                                     │
+│     ${config.currentImport.padEnd(52)} │
+│                                                                 │
+│  ✅ Replace with (recommended):                                 │
+│     ${config.recommendedImport.padEnd(52)} │
+│                                                                 │
+│  💡 Alternative (universal):                                    │
+│     import { Vanisher } from 'vanisher'                        │
+│                                                                 │
+└─────────────────────────────────────────────────────────────────┘
 
-Current import: ${config.currentImport}
-Recommended import: ${config.recommendedImport}
+📚 Documentation: https://vanisher.js.org/examples/next
 `;
 
-    // Use console.warn instead of console.error for better UX
-    console.warn(warningMessage);
+    // Display warning in console
+    console.error(warningMessage);
 
-    // Only show alert in development
-    if (
-      process.env["NODE_ENV"] === "development" ||
-      process.env["NODE_ENV"] === "test"
-    ) {
-      // Use a more user-friendly alert
-      setTimeout(() => {
-        alert(`🚨 ${config.title}! Check console for details.`);
-      }, 100);
-    }
-
-    // Throw error only in production for better debugging
-    if (process.env["NODE_ENV"] === "production") {
-      throw new Error(config.errorMessage);
-    }
+    // Also display as warning for visibility
+    console.warn("🚨 VANISHER WARNING:", config.title);
   };
 };
 
 const REACT_WARNING_CONFIG: WarningConfig = {
-  title: "REACT COMPONENT USED IN NEXT.JS PROJECT!",
+  title: "INCOMPATIBLE COMPONENT DETECTED!",
   message:
-    "You're trying to use the React-specific component in a Next.js project.\nThis component is designed for regular React projects and may not work properly with Next.js.",
-  currentImport: "vanisher/react",
-  recommendedImport:
-    "Use the Next.js component instead: import { VanisherWrapper } from 'vanisher/next'",
+    "You're importing 'vanisher/react' in a Next.js project, but this component is designed for regular React applications only.\n\nThis will cause issues with:\n• Server-side rendering (SSR)\n• Hydration mismatches\n• Next.js App Router compatibility\n• Performance optimizations",
+  currentImport: "import { VanisherReactWrapper } from 'vanisher/react'",
+  recommendedImport: "import { VanisherNextWrapper } from 'vanisher/next'",
   errorMessage:
-    "React component should not be used in Next.js projects. Use vanisher/next instead.",
+    "vanisher/react component cannot be used in Next.js projects. Use vanisher/next for proper Next.js compatibility including SSR, hydration, and App Router support.",
 };
 
 const NEXTJS_WARNING_CONFIG: WarningConfig = {

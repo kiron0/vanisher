@@ -5,6 +5,8 @@ Learn how to use VanisherJS with Next.js applications, including SSR considerati
 ## Basic Next.js Component
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function EventPage() {
@@ -21,31 +23,11 @@ export default function EventPage() {
 }
 ```
 
-## With Server-Side Rendering
-
-```jsx
-import { VanisherNextWrapper } from "vanisher/next";
-
-export default function TrialPage() {
-  return (
-    <VanisherNextWrapper
-      deadline="2024-12-31T23:59:59"
-      fallback={<div>Trial period has ended</div>}
-    >
-      <div className="trial-content">
-        <h1>Free Trial</h1>
-        <p>Enjoy premium features until December 31st</p>
-        <p>Upgrade now to continue accessing all features</p>
-        <button>Upgrade Now</button>
-      </div>
-    </VanisherNextWrapper>
-  );
-}
-```
-
 ## With Custom Styling
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function PromotionalPage() {
@@ -70,43 +52,11 @@ export default function PromotionalPage() {
 }
 ```
 
-## With Dynamic Deadlines
-
-```jsx
-import { VanisherNextWrapper } from "vanisher/next";
-
-export default function DynamicPage({ endDate }) {
-  return (
-    <VanisherNextWrapper
-      deadline={endDate}
-      fallback={<div>Offer has expired</div>}
-    >
-      <div className="dynamic-content">
-        <h1>Dynamic Content</h1>
-        <p>This content will fade out based on the provided end date</p>
-        <p>End date: {new Date(endDate).toLocaleDateString()}</p>
-      </div>
-    </VanisherNextWrapper>
-  );
-}
-
-// Example usage with getServerSideProps
-export async function getServerSideProps() {
-  // Calculate end date (e.g., 30 days from now)
-  const endDate = new Date();
-  endDate.setDate(endDate.getDate() + 30);
-
-  return {
-    props: {
-      endDate: endDate.toISOString(),
-    },
-  };
-}
-```
-
 ## With Callback Functions
 
 ```jsx
+"use client";
+
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function CallbackPage() {
@@ -132,11 +82,20 @@ export default function CallbackPage() {
 }
 ```
 
-## App Router Implementation
+## Next.js Router Compatibility
+
+### App Router vs Pages Router
+
+VanisherJS works with both Next.js routing systems:
+
+- **App Router (Next.js 13+)**: Requires `"use client"` directive for client-side features
+- **Pages Router (Traditional)**: No directive needed, works automatically
+
+### App Router Implementation
 
 ```jsx
 // app/page.tsx
-"use client";
+"use client"; // Only needed for Next.js App Router client components
 
 import { VanisherNextWrapper } from "vanisher/next";
 
@@ -169,6 +128,7 @@ export default function HomePage() {
 
 ```jsx
 // pages/index.tsx
+// No "use client" directive needed for Pages Router
 import { VanisherNextWrapper } from "vanisher/next";
 
 export default function HomePage() {
@@ -193,41 +153,6 @@ export default function HomePage() {
       </div>
     </div>
   );
-}
-```
-
-## Dynamic Routes
-
-```jsx
-// pages/offers/[id].tsx
-import { VanisherNextWrapper } from "vanisher/next";
-
-export default function OfferPage({ offer }) {
-  return (
-    <VanisherNextWrapper
-      deadline={offer.expiryDate}
-      fallback={<div>This offer has expired</div>}
-    >
-      <div className="offer-details">
-        <h1>{offer.title}</h1>
-        <p>{offer.description}</p>
-        <p>Expires: {new Date(offer.expiryDate).toLocaleDateString()}</p>
-        <button>Claim Offer</button>
-      </div>
-    </VanisherNextWrapper>
-  );
-}
-
-export async function getServerSideProps({ params }) {
-  // Fetch offer data from API
-  const response = await fetch(`https://api.example.com/offers/${params.id}`);
-  const offer = await response.json();
-
-  return {
-    props: {
-      offer,
-    },
-  };
 }
 ```
 
@@ -268,53 +193,6 @@ const OfferPage: NextPage<OfferPageProps> = ({ offer }) => {
 };
 
 export default OfferPage;
-```
-
-## Multiple Instances
-
-```jsx
-import { VanisherNextWrapper } from "vanisher/next";
-
-export default function MultipleOffersPage() {
-  return (
-    <div>
-      <h1>Current Offers</h1>
-
-      <VanisherNextWrapper
-        deadline="2024-12-31T23:59:59"
-        fallback={<div>Holiday offer expired</div>}
-      >
-        <div className="offer holiday-offer">
-          <h2>🎄 Holiday Special</h2>
-          <p>Get 30% off all holiday items</p>
-          <p>Expires December 31st, 2024</p>
-        </div>
-      </VanisherNextWrapper>
-
-      <VanisherNextWrapper
-        deadline="2025-01-15T23:59:59"
-        fallback={<div>New Year offer expired</div>}
-      >
-        <div className="offer new-year-offer">
-          <h2>🎊 New Year Sale</h2>
-          <p>Start the year with 25% off</p>
-          <p>Expires January 15th, 2025</p>
-        </div>
-      </VanisherNextWrapper>
-
-      <VanisherNextWrapper
-        deadline="2025-02-01T23:59:59"
-        fallback={<div>Valentine offer expired</div>}
-      >
-        <div className="offer valentine-offer">
-          <h2>💝 Valentine's Special</h2>
-          <p>20% off all romantic items</p>
-          <p>Expires February 1st, 2025</p>
-        </div>
-      </VanisherNextWrapper>
-    </div>
-  );
-}
 ```
 
 ## With CSS-in-JS

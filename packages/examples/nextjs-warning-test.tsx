@@ -1,10 +1,10 @@
-"use client";
+"use client"; // Required for Next.js App Router client components
 
 import React from "react";
 
 // This import will trigger warnings/errors in Next.js projects
 // because it's designed for regular React only
-import { VanisherWrapper } from "../src/react";
+import { VanisherReactWrapper } from "../src/react";
 
 /**
  * 🚨 WARNING: This example demonstrates what happens when you try to use
@@ -39,7 +39,7 @@ function NextJSWarningTest() {
         </ul>
       </div>
 
-      <VanisherWrapper
+      <VanisherReactWrapper
         deadline={new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)}
         onDeadlineReached={() => alert("Deadline reached!")}
       >
@@ -58,7 +58,7 @@ function NextJSWarningTest() {
             Next.js!
           </p>
         </div>
-      </VanisherWrapper>
+      </VanisherReactWrapper>
     </div>
   );
 }

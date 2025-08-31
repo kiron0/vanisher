@@ -1,7 +1,7 @@
-"use client";
+"use client"; // Required for Next.js App Router client components
 
 import React, { useState } from "react";
-import { VanisherWrapper } from "../src/next";
+import { VanisherNextWrapper } from "../src/next";
 
 // Next.js page component
 export default function VanisherPage() {
@@ -24,7 +24,7 @@ export default function VanisherPage() {
 
   return (
     <div style={{ fontFamily: "Arial, sans-serif", margin: 0, padding: 20 }}>
-      <VanisherWrapper
+      <VanisherNextWrapper
         deadline={deadline}
         onDeadlineReached={handleDeadlineReached}
         style={{
@@ -90,9 +90,13 @@ export default function VanisherPage() {
           >
             <strong>⚠️ Next.js Features:</strong>
             <ul style={{ textAlign: "left", display: "inline-block" }}>
-              <li>Uses 'use client' directive for client-side rendering</li>
+              <li>
+                Uses 'use client' directive for App Router client components
+              </li>
               <li>Hydration-safe with isClient state</li>
-              <li>Fully compatible with Next.js 13+ App Router</li>
+              <li>
+                Fully compatible with Next.js 13+ App Router and Pages Router
+              </li>
               <li>TypeScript support out of the box</li>
             </ul>
           </div>
@@ -150,7 +154,7 @@ export default function VanisherPage() {
             </div>
           </div>
         </div>
-      </VanisherWrapper>
+      </VanisherNextWrapper>
     </div>
   );
 }

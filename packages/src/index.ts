@@ -1,7 +1,7 @@
-import {
-  type VanisherOptions,
-  type VanisherResult,
-  type VanisherWrapperProps,
+import type {
+  VanisherOptions,
+  VanisherResult,
+  VanisherWrapperProps,
 } from "./types";
 
 // Performance optimization: Cache frequently used values
@@ -336,10 +336,6 @@ if (typeof window !== "undefined" && typeof document !== "undefined") {
   }
 }
 
-export {
-  createVanisher,
-  Vanisher,
-  type VanisherOptions,
-  type VanisherResult,
-  type VanisherWrapperProps,
-};
+export { createVanisher, Vanisher };
+
+export type { VanisherOptions, VanisherResult, VanisherWrapperProps };
